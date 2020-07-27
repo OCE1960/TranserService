@@ -34,6 +34,14 @@ class TransferServiceController extends Controller
         } 
 
         $user_id = Auth::id();
+
+        //Redirect to the create Service Time page if validation fails.
+        if ($user_id == null) {
+            return response()->json(['errors'=>'User not Authorized'], 422);
+        } 
+
+
+
         $from_account_balance = Balance::where('user_id', $user_id)->pluck('balance')->all();
         $from_account_nr = Balance::where('user_id', $user_id)->pluck('account_nr')->all();
         if($from_account_balance > $request->amount) {
@@ -79,7 +87,7 @@ class TransferServiceController extends Controller
 
         $validation_messages = array(
             'required' => 'The :attribute field is required.',
-            'numeric' => 'The :attribute field be a Number.',
+            'numeric' => 'The :attribute field is to be Number.',
         );
 
         $attributes = [
